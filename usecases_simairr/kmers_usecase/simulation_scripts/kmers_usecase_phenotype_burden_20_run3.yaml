@@ -1,0 +1,12 @@
+allow_closer_phenotype_burden: true
+mode: signal_implantation
+n_repertoires: 200
+n_sequences: 100000
+n_threads: 100
+olga_model: humanTRB
+output_path: /doctorai/skanduri/usecases_simairr/kmers_usecase/run3/phenotype_burden_20/data
+phenotype_burden: 20
+phenotype_pool_size: 450
+seed: 380
+signal_sequences_file: /doctorai/skanduri/usecases_simairr/bm_kmer_seqs.tsv
+store_intermediate_files: false

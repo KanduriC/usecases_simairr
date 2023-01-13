@@ -1,0 +1,17 @@
+burden_and_pools:
+  - !!python/tuple [10, 160]
+mode: "signal_implantation"
+olga_model: "humanTRB"
+n_repertoires: 200
+n_sequences: 90000
+n_threads: 20
+output_path: ""
+seed: ""
+signal_sequences_file: ""
+phenotype_burden: ""
+phenotype_pool_size: ""
+allow_closer_phenotype_burden: True
+store_intermediate_files: False
+usecase_name: "sample_size_200"
+super_path: "/doctorai/skanduri/usecases_simairr/fullseq_usecase"
+signal_file: "/doctorai/skanduri/usecases_simairr/bm_hcv_fullseq_seqs.tsv"

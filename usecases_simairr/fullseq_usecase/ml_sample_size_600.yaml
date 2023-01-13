@@ -1,0 +1,90 @@
+definitions:
+  datasets:
+    simairr_kmers:
+      format: OLGA
+      params:
+        path: /doctorai/skanduri/usecases_simairr/test_phen_burden_20/simulated_repertoires
+        metadata_file: /doctorai/skanduri/usecases_simairr/test_phen_burden_20/simulated_repertoires/metadata.csv
+        columns_to_load: [0, 1, 2] # order number of the column to load
+        column_mapping: # what they map to in immuneML setting
+          0: sequence_aas
+          1: v_genes
+          2: j_genes
+  encodings:
+    p_1e04:
+      CompAIRRSequenceAbundance:
+        compairr_path: /storage/userapps/skanduri/ligo_branch/compairr
+        p_value_threshold: 0.0001
+        ignore_genes: True
+        sequence_batch_size: 1000000
+        threads: 8
+    p_1e03:
+      CompAIRRSequenceAbundance:
+        compairr_path: /storage/userapps/skanduri/ligo_branch/compairr
+        p_value_threshold: 0.001
+        ignore_genes: True
+        sequence_batch_size: 1000000
+        threads: 8
+    p_1e02:
+      CompAIRRSequenceAbundance:
+        compairr_path: /storage/userapps/skanduri/ligo_branch/compairr
+        p_value_threshold: 0.01
+        ignore_genes: True
+        sequence_batch_size: 1000000
+        threads: 8
+    p_5e02:
+      CompAIRRSequenceAbundance:
+        compairr_path: /storage/userapps/skanduri/ligo_branch/compairr
+        p_value_threshold: 0.05
+        ignore_genes: True
+        sequence_batch_size: 1000000
+        threads: 8
+  ml_methods:
+    ml:
+      ProbabilisticBinaryClassifier:
+        max_iterations: 1000
+        update_rate: 0.01
+  reports:
+    enc_data: DesignMatrixExporter # export encoded data in csv format
+    feature_performance_plot: # show how performance changes depending on p-value threshold
+      CVFeaturePerformance:
+        feature: p_value_threshold
+    sequence_overlap: # show if CMV-associated sequences overlap between CV folds
+      DiseaseAssociatedSequenceCVOverlap:
+        compare_in_selection: True
+        compare_in_assessment: True
+    relevant_sequences: RelevantSequenceExporter # export CMV-associated sequences
+instructions:
+  hpoptim_instr:
+    reports: [feature_performance_plot, sequence_overlap]
+    assessment: 
+      split_strategy: k_fold
+      split_count: 5
+      reports:
+        encoding: [enc_data, relevant_sequences]
+        models: []
+    selection:
+      split_strategy: k_fold
+      split_count: 5
+      reports:
+        encoding: [enc_data, relevant_sequences]
+    number_of_processes: 80
+    dataset: simairr_kmers
+    labels:
+    - label_positive:
+        positive_class: True
+    optimization_metric: balanced_accuracy
+    metrics:
+    - auc
+    strategy: GridSearch
+    type: TrainMLModel
+    refit_optimal_model: False
+    settings:
+    - encoding: p_1e04
+      ml_method: ml
+    - encoding: p_1e03
+      ml_method: ml
+    - encoding: p_1e02
+      ml_method: ml
+    - encoding: p_5e02
+      ml_method: ml

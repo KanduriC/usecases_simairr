@@ -1,0 +1,62 @@
+definitions:
+  datasets:
+    simairr_kmers:
+      format: OLGA
+      params:
+        path: /doctorai/skanduri/usecases_simairr/kmers_usecase/run1/phenotype_burden_5/data/simulated_repertoires
+        metadata_file: /doctorai/skanduri/usecases_simairr/kmers_usecase/run1/phenotype_burden_5/data/simulated_repertoires/metadata.csv
+  encodings:
+    feature_size_4:
+      KmerFrequency:
+        k: 4
+        scale_to_unit_variance: True
+        scale_to_zero_mean: True
+  ml_methods:
+    logistic_regression:
+      LogisticRegression:
+        penalty: l1
+        C: [5,1,0.1,0.05]
+        max_iter: 500
+      model_selection_cv: True
+      model_selection_n_folds: 5
+  reports:
+    my_hp_benchmark: MLSettingsPerformance
+    my_coef_report:
+        Coefficients:
+            coefs_to_plot:
+                - n_largest
+            n_largest: [15]
+    my_motif_report:
+        MotifSeedRecovery:
+            implanted_motifs_per_label:
+                signal_cancer:
+                    seeds: [YREV,WKDY,ERFY]
+                    hamming_distance: False
+                    gap_sizes: [0]
+instructions:
+  hpoptim_instr:
+    assessment:
+      reports:
+        models: [my_coef_report, my_motif_report]
+      split_count: 5
+      split_strategy: k_fold
+      training_percentage: 0.7
+    number_of_processes: 90
+    dataset: simairr_kmers
+    labels:
+    - label_positive
+    metrics:
+    - auc
+    - recall
+    optimization_metric: balanced_accuracy
+    reports: [my_hp_benchmark]
+    selection:
+      split_count: 1
+      split_strategy: random
+      training_percentage: 1.0
+    settings:
+    - encoding: feature_size_4
+      ml_method: logistic_regression
+    strategy: GridSearch
+    type: TrainMLModel
+    refit_optimal_model: False

@@ -1,0 +1,19 @@
+burden_and_pools:
+  - !!python/tuple [5, 120]
+  - !!python/tuple [10, 240]
+  - !!python/tuple [20, 450]
+mode: "signal_implantation"
+olga_model: "humanTRB"
+n_repertoires: 200
+n_sequences: 100000
+n_threads: 100
+output_path: ""
+seed: ""
+signal_sequences_file: ""
+phenotype_burden: ""
+phenotype_pool_size: ""
+allow_closer_phenotype_burden: True
+store_intermediate_files: False
+usecase_name: "kmers_usecase"
+super_path: "/doctorai/skanduri/usecases_simairr"
+signal_file: "/doctorai/skanduri/usecases_simairr/bm_kmer_seqs.tsv"
