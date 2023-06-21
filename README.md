@@ -1,11 +1,29 @@
 # usecases_simairr
 
-This repository contains scripts for reproducing the case studies and analyses of simAIRR manuscript.
+This repository contains scripts for reproducing the case studies and analyses of simAIRR manuscript. In addition, this package provides console scripts that can be run through command-line to learn custom models of realistic receptor sharing for different AIRR loci (i.e. to generate custom pgen_count_map files based on different datasets).
 
 ## Instructions
 
 - It is recommended to install both `simAIRR` and `usecases_simairr` in a new conda environment. It is also required that [compAIRR](https://github.com/uio-bmi/compairr) and [immuneML](https://github.com/uio-bmi/immuneML) are installed. The instructions further below assumes that `simAIRR`, `compAIRR`, `immuneML` and `usecases_simairr` are installed.
 - All the scripts in `usecases_simairr` are exported as console scripts to be run on command-line interface. The code chunks below show how the console scripts are to be run.
+
+### Custom models of realistic receptor sharing for different AIRR loci
+
+- Note that in simAIRR package, we have provided empirical models for realistic receptor sequence sharing just for TCRB loci, based on the public availability of a large experimental dataset. For other AIRR loci, custom models will be added into future versions of simAIRR when large-scale experimental data for other loci becomes available. For now users are encouraged to generate their own custom models of realistic receptor sharing for other loci (if sufficiently large data available to them). Note that, based on our analyses, a sample size of 200 (100 each of cases and controls) approximates well the realistic receptor sequence sharing. 
+
+- Through this package, we provide console scripts that can be run through command line to learn custom models for realistic receptor sequence sharing. Each console script requires some input parameters from the users. To know which input arguments are required for each console script, we recommend using the `--help` argument of each console script. For instance, `concat_airr --help`. 
+
+- Note that the following console scripts are expected to be run in a sequence.
+
+| Command | Description                                                                                                                                                                         |
+| --- |-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `concat_airr` | Concatenate the repertoire files into two separate files that will be needed by [compAIRR](https://github.com/uio-bmi/compairr) tool to count the frequencies of each unique clones |
+| `run_compairr_seqcounts` | Run [compAIRR](https://github.com/uio-bmi/compairr) tool to count the frequencies of each unique clones.                                                                            |
+| `compute_pgen_public` | Compute the generation probabilities of each sequence using OLGA tool.                                                                                                              |
+| `compute_pval` | Computes p-values as the probability of observing a public sequence in the same or higher number of repertoires as it was observed in for a given dataset.                          |
+| `concat_pdata` | Concatenate the files generated through previous step to produce one large file that will be used in the next step                                                                  |
+| `gen_pgen_count_map` | Generate pgen_count_map files in the required format desired by simAIRR                                                                                                             |
+
 
 ### case study-1
 

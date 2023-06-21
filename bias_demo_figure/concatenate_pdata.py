@@ -7,12 +7,12 @@ from statsmodels.stats.multitest import multipletests
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--dir_path', help='path to pdata_pgen_* files')
-parser.add_argument('--reference_seq_file', help='path to file containing true reference sequences')
+parser.add_argument('--reference_seq_file', required=False, default=None,
+                    help='path to file containing true reference sequences')
 args = parser.parse_args()
 
 
-def concatenate_pdata_files(dir_path, reference_seq_file):
-    ref_seq = pd.read_csv(reference_seq_file, header=0, index_col=None, error_bad_lines=False, sep='\t')
+def concatenate_pdata_files(dir_path, reference_seq_file=None):
     found_files = glob.glob(dir_path + "/pdata_pgen_*", recursive=True)
     li = []
     for i, filename in enumerate(found_files):
@@ -22,8 +22,10 @@ def concatenate_pdata_files(dir_path, reference_seq_file):
     outfile_df = pd.concat(li, axis=0)
     outfile_df['qval_pos'] = multipletests(outfile_df['pval_pos'], method="fdr_bh")[1]
     outfile_df['qval_neg'] = multipletests(outfile_df['pval_neg'], method="fdr_bh")[1]
-    outfile_df = pd.merge(outfile_df, ref_seq, how="left", indicator='ref_seq')
-    outfile_df['ref_seq'] = np.where(outfile_df.ref_seq == "both", True, False)
+    if reference_seq_file is not None:
+        ref_seq = pd.read_csv(reference_seq_file, header=0, index_col=None, error_bad_lines=False, sep='\t')
+        outfile_df = pd.merge(outfile_df, ref_seq, how="left", indicator='ref_seq')
+        outfile_df['ref_seq'] = np.where(outfile_df.ref_seq == "both", True, False)
     outfile_df['public_count'] = outfile_df['neg_count'] + outfile_df['pos_count']
     public_df = outfile_df[outfile_df['public_count'] > 1]
     private_df = outfile_df[outfile_df['public_count'] == 1]

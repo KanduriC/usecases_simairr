@@ -32,6 +32,9 @@ parser.add_argument('--compute_pgen',
 parser.add_argument('--vj_gene_conditioning',
                     help='if 1, sequences are conditioned on V and J genes before computing pgen, else no conditioning',
                     type=int, required=True)
+parser.add_argument('--filter_legal_genes',
+                    help='if 1, rows without legal genes are not filtered out',
+                    type=int, required=True)
 args = parser.parse_args()
 
 
@@ -88,7 +91,7 @@ def _read_pgen_file(pgen_file_path):
 class ComputePgenPublic:
     def __init__(self, design_mats_path, seq_concat_file_df, legal_vgenes_file, legal_jgenes_file, n_threads,
                  metadata_file, label_field, avg_rep_size,
-                 public_counts_in=1, compute_pgen=True, vj_gene_conditioning=1):
+                 public_counts_in=1, compute_pgen=True, vj_gene_conditioning=1, filter_legal_genes=0):
         self.design_mats_path = design_mats_path
         self.seq_concat_file_df = seq_concat_file_df
         self.legal_vgenes_file = legal_vgenes_file
@@ -102,6 +105,7 @@ class ComputePgenPublic:
         self.public_counts_in = public_counts_in
         self.compute_pgen = compute_pgen
         self.vj_gene_conditioning = vj_gene_conditioning
+        self.filter_legal_genes = filter_legal_genes
 
     def compute_pgen_public_sequences(self, compairr_design_mat):
         vgene_list, jgene_list = self._read_legal_genes()
@@ -116,7 +120,10 @@ class ComputePgenPublic:
         counts_df = self._add_labels(counts_df)
         counts_df = self._filter_counts(counts_df)
         merged_counts_df = self._merge_counts_with_sequences(counts_df)
-        genefilt_df = self._filter_by_gene_list(merged_counts_df, vgene_list, jgene_list)
+        if self.filter_legal_genes == 0:
+            genefilt_df = self._filter_by_gene_list(merged_counts_df, vgene_list, jgene_list)
+        else:
+            genefilt_df = merged_counts_df
         _write_to_file(genefilt_df, out_file_path)
         if self.compute_pgen:
             pgen_file_path = _get_pgen_file_path(out_file_path)
@@ -195,5 +202,6 @@ def execute():
                                         n_threads=args.n_threads, metadata_file=args.metadata_file,
                                         label_field=args.label_field, avg_rep_size=args.avg_rep_size,
                                         public_counts_in=args.public_counts_in, compute_pgen=args.compute_pgen,
-                                        vj_gene_conditioning=args.vj_gene_conditioning)
+                                        vj_gene_conditioning=args.vj_gene_conditioning,
+                                        filter_legal_genes=args.filter_legal_genes)
     compute_pgen_wf.multi_compute_pgen_public_sequences()

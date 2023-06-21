@@ -24,4 +24,6 @@ setup(
                                       'run_compairr_seqcounts=bias_demo_figure.run_compairr_seqcounts:execute',
                                       'compute_pgen_public=bias_demo_figure.compute_pgen_public_sequences:execute',
                                       'compute_pval=bias_demo_figure.compute_pval:execute',
-                                      'concat_pdata=bias_demo_figure.concatenate_pdata:execute']})
+                                      'concat_pdata=bias_demo_figure.concatenate_pdata:execute',
+                                      'preprocess_pediatric_covid_dataset=bias_demo_figure.preprocess_pediatric_covid_dataset:execute',
+                                      'gen_pgen_count_map=bias_demo_figure.generate_pgen_count_map:execute']})
