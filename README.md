@@ -63,3 +63,22 @@ $ multi_ml -s /path/to/sample_size_400/{run1, run2, run3} -m ml_sample_size_400.
 $ multi_ml -s /path/to/sample_size_600/{run1, run2, run3} -m ml_sample_size_600.yaml
 ```
 
+### Data and scripts for the reproducibility of Figures 2-4
+
+Figure 2: 
+- The experimental data used in Figure-2 as explained in the main manuscript is downloaded from public database as described in Emerson RO, DeWitt WS, Vignali M, Gravley J, Hu JK, Osborne EJ, et al.. Immunosequencing identifies signatures of cytomegalovirus exposure history and HLA-mediated effects on the T cell repertoire. Nat Genet. 2017; doi: 10.1038/ng.3822.
+- The scripts used to generate Figure-2 are provided in `bias_demo_figure` directory of this repository and described in detail above in the section `Custom models of realistic receptor sharing for different AIRR loci`.
+
+Figure 3:
+
+(same input data and scripts as Figure 2)
+- The experimental data used in Figure-2 as explained in the main manuscript is downloaded from public database as described in Emerson RO, DeWitt WS, Vignali M, Gravley J, Hu JK, Osborne EJ, et al.. Immunosequencing identifies signatures of cytomegalovirus exposure history and HLA-mediated effects on the T cell repertoire. Nat Genet. 2017; doi: 10.1038/ng.3822.
+- The scripts used to generate Figure-2 are provided in `bias_demo_figure` directory of this repository and described in detail above in the section `Custom models of realistic receptor sharing for different AIRR loci`.
+
+Figure 4:
+- Simulated datasets used in the case studies with permanent DOI: https://doi.org/10.11582/2023.00011. 
+- Configuration files to reproduce the simulations and ML models of the use cases are provided in `usecases_simairr` directory of this repository and guidelines are provided above under case study-1 and case study-2.
+
+
+
+
